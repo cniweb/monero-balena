@@ -1,0 +1,52 @@
+name: CI - buildx multi-arch test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-matrix:
+    name: Build (matrix)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - arch: armv7
+            platform: linux/arm/v7
+            base_build_image: balenalib/raspberrypi-debian:bookworm-build
+            base_run_image: balenalib/raspberrypi-debian:bookworm-run
+            device_type: raspberrypi
+          - arch: arm64
+            platform: linux/arm64
+            base_build_image: balenalib/aarch64-debian:bookworm-build
+            base_run_image: balenalib/aarch64-debian:bookworm-run
+            device_type: raspberrypi4-64
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+        with:
+          version: 'v6.1.0'
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build for ${{ matrix.arch }} (test)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: ${{ matrix.platform }}
+          push: false
+          tags: test/monero-balena:ci-${{ matrix.arch }}
+          build-args: |
+            BASE_BUILD_IMAGE=${{ matrix.base_build_image }}
+            BASE_RUN_IMAGE=${{ matrix.base_run_image }}
+            DEVICE_TYPE=${{ matrix.device_type }}
+
+      - name: Success marker
+        run: echo "Buildx test for ${{ matrix.arch }} completed"
