@@ -37,8 +37,8 @@ The following [Device Configuration](https://www.balena.io/docs/learn/manage/con
 | Name                                  | Value                                                                                     |
 | ------------------------------------- | ----------------------------------------------------------------------------------------- |
 | WALLET_ADDRESS                        | Change this to your monero wallet address which you install and set
-| MINER_POOL                            | (Optional) Change this to the mining pool you want to join, default is: ```xmr.2miners.com:2222```                           |
-| PASSWORD.                             | (Optional) Change this to yor pool password  
+| MINER_POOL                            | (Optional) Change this to the mining pool you want to join
+| PASSWORD                              | (Optional) Change this to yor pool password  
 
 --------------------
 
