@@ -2,8 +2,14 @@
 # Build 
 ###
 
-FROM balenalib/aarch64-debian:bookworm-build as build
-LABEL io.balena.device-type="raspberrypi4-64"
+ARG BASE_BUILD_IMAGE=balenalib/aarch64-debian:bookworm-build
+ARG BASE_RUN_IMAGE=balenalib/aarch64-debian:bookworm-run
+# Optional: override device-type label (useful for balena metadata)
+ARG DEVICE_TYPE=raspberrypi4-64
+
+# Default labels assume 64-bit Pi 4; override when building for other platforms if needed
+FROM ${BASE_BUILD_IMAGE} as build
+LABEL io.balena.device-type="${DEVICE_TYPE}"
 
 WORKDIR /usr/src/app
 
@@ -16,8 +22,8 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/xmrig/xmrig.git
-RUN mkdir xmrig/build
-WORKDIR xmrig/build
+RUN mkdir -p xmrig/build
+WORKDIR /usr/src/app/xmrig/build
 RUN cmake ..
 RUN make -j$(nproc)
 
@@ -26,7 +32,7 @@ RUN make -j$(nproc)
 # Runtime
 ###
 
-FROM balenalib/aarch64-debian:bookworm-run
+FROM ${BASE_RUN_IMAGE}
 
 RUN apt-get update \
     && apt-get install -yq \    
