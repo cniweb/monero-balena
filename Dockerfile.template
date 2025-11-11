@@ -2,7 +2,8 @@
 # Build 
 ###
 
-FROM balenalib/%%BALENA_MACHINE_NAME%%:buster-build as build
+FROM balenalib/aarch64-debian:bookworm-build as build
+LABEL io.balena.device-type="raspberrypi4-64"
 
 WORKDIR /usr/src/app
 
@@ -25,7 +26,7 @@ RUN make -j$(nproc)
 # Runtime
 ###
 
-FROM balenalib/%%BALENA_MACHINE_NAME%%:buster-run
+FROM balenalib/aarch64-debian:bookworm-run
 
 RUN apt-get update \
     && apt-get install -yq \    
@@ -34,7 +35,8 @@ RUN apt-get update \
     libhwloc-dev 
 
 ENV WALLET_ADDRESS=''
-ENV MINER_POOL='xmr.2miners.com:2222'
+ENV MINER_POOL=''
+ENV PASSWORD=''
 
 WORKDIR /usr/src/app
 COPY --from=build /usr/src/app/xmrig/build/xmrig /usr/local/bin
