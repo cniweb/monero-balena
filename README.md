@@ -1,6 +1,6 @@
 Monero-Miner for Single board computers like Raspberry Pi, powered by [balena](https://balena.io)
 
-![](https://raw.githubusercontent.com/iayanpahwa/monero-miner/master/assets/logo.png)
+![](https://raw.githubusercontent.com/cniweb/monero-balena/master/assets/logo.png)
 
 ## Introduction
 Support Monero blockchain, validating the transactions by lending your compute power from SBCs like a Raspberry Pi and earn XMRs (cryptocurrency of Monero blockchain) in return.
@@ -22,7 +22,7 @@ Support Monero blockchain, validating the transactions by lending your compute p
 
 You can deploy this app to a new balenaCloud fleet in one click using the button below:
 
-[![deploy button](https://balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/iayanpahwa/monero-miner)
+[![deploy button](https://balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/cniweb/monero-balena)
 
 
 Or, you can create a fleet in your balenaCloud dashboard, clone this repo and `balena push` this code to it, the traditional way.
@@ -38,6 +38,7 @@ The following [Device Configuration](https://www.balena.io/docs/learn/manage/con
 | ------------------------------------- | ----------------------------------------------------------------------------------------- |
 | WALLET_ADDRESS                        | Change this to your monero wallet address which you install and set
 | MINER_POOL                            | (Optional) Change this to the mining pool you want to join, default is: ```xmr.2miners.com:2222```                           |
+| PASSWORD.                             | (Optional) Change this to yor pool password  
 
 --------------------
 
