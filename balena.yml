@@ -23,16 +23,17 @@ assets:
   repository:
     type: blob.asset
     data:
-      url: 'https://github.com/iayanpahwa/monero-miner'
+      url: 'https://github.com/cniweb/monero-balena'
   logo:
     type: blob.asset
     data:
       url: >-
-        https://raw.githubusercontent.com/iayanpahwa/monero-miner/master/assets/logo.png
+        https://raw.githubusercontent.com/cniweb/monero-balena/master/assets/logo.png
 data:
   applicationEnvironmentVariables:
     - WALLET_ADDRESS: '' 
-    - MINER_POOL: 'xmr.2miners.com:2222'
+    - MINER_POOL: ''
+    - PASSWORD: ''
     
   defaultDeviceType: raspberrypi4-64
   supportedDeviceTypes:
