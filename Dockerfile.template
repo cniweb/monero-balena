@@ -2,8 +2,8 @@
 # Build 
 ###
 
-ARG BASE_BUILD_IMAGE=balenalib/aarch64-debian:bookworm-build
-ARG BASE_RUN_IMAGE=balenalib/aarch64-debian:bookworm-run
+ARG BASE_BUILD_IMAGE=balenalib/raspberrypi-debian:bookworm-build
+ARG BASE_RUN_IMAGE=balenalib/raspberrypi-debian:bookworm-run
 # Optional: override device-type label (useful for balena metadata)
 ARG DEVICE_TYPE=raspberrypi4-64
 
@@ -15,7 +15,11 @@ WORKDIR /usr/src/app
 
 RUN apt-get update \
     && apt-get install -yq \
+    build-essential \
+    git \
     cmake \
+    pkg-config \
+    libssl-dev \
     libuv1-dev \
     libhwloc-dev \
     && apt-get clean \
@@ -25,7 +29,8 @@ RUN git clone https://github.com/xmrig/xmrig.git
 RUN mkdir -p xmrig/build
 WORKDIR /usr/src/app/xmrig/build
 RUN cmake ..
-RUN make -j$(nproc)
+# Use a single job to reduce peak memory usage on remote builders (avoid OOM)
+RUN make -j1
 
 
 ###
