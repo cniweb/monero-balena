@@ -13,5 +13,5 @@ echo "Starting Monero Miner ......"
 sleep 4
 
 xmrig -o $MINER_POOL \
-      -u $WALLET_ADDRESS.$RESIN_DEVICE_NAME_AT_INIT \
+      -u $WALLET_ADDRESS \
       -p $PASSWORD
