@@ -6,7 +6,10 @@ sleep 1
 echo "Miner Pool: $MINER_POOL"
 sleep 1
 
-echo "Device Name: $PASSWORD"
+echo "Pool Password: $PASSWORD"
+sleep 1
+
+echo "Device Name: $RESIN_DEVICE_NAME_AT_INIT"
 sleep 1
 
 echo "Starting Monero Miner ......"
