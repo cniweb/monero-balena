@@ -17,4 +17,5 @@ sleep 4
 
 xmrig -o $MINER_POOL \
       -u $WALLET_ADDRESS \
-      -p $PASSWORD
+      -p $PASSWORD \
+      --donate-level=1
