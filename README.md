@@ -1,48 +1,40 @@
-Monero-Miner for Single board computers like Raspberry Pi, powered by [balena](https://balena.io)
+# Monero miner for single-board computers (Raspberry Pi), powered by [balena](https://balena.io)
 
-![](https://raw.githubusercontent.com/cniweb/monero-balena/master/assets/logo.png)
+![monero-balena logo](https://raw.githubusercontent.com/cniweb/monero-balena/master/assets/logo.png)
 
 ## Introduction
-Support Monero blockchain, validating the transactions by lending your compute power from SBCs like a Raspberry Pi and earn XMRs (cryptocurrency of Monero blockchain) in return.
 
---------------------
+Support the Monero blockchain by validating transactions with compute power from SBCs like a Raspberry Pi and earn XMR (the cryptocurrency of the Monero blockchain) in return.
+
 ## Hardware required
 
-- A Raspberry Pi 4 (the more RAM it has the better) -- currently tested to work
+- A Raspberry Pi 4 (the more RAM it has the better) — currently tested to work
 - 16GB Micro-SD Card (recommended Sandisk Extreme Pro SD cards)
 - Power supply for the Pi
 
---------------------
 ## Software required
 
-- Monero Wallet to receive the XMR rewards, download from [here](http://getmonero.org/downloads/#gui)
+- Monero Wallet to receive the XMR rewards, download from the [Monero GUI wallet downloads](http://getmonero.org/downloads/#gui)
 
---------------------
 ## Deploy a fleet
 
 You can deploy this app to a new balenaCloud fleet in one click using the button below:
 
 [![deploy button](https://balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/cniweb/monero-balena)
 
-
 Or, you can create a fleet in your balenaCloud dashboard, clone this repo and `balena push` this code to it, the traditional way.
 
---------------------
+### Configuring the miner
 
-#### Configuring the miner
+The following [Device Configuration](https://www.balena.io/docs/learn/manage/configuration/#configuration-variables) variables are required; these can be set in the balenaCloud dashboard:
 
-The following [Device Configuration](https://www.balena.io/docs/learn/manage/configuration/#configuration-variables) variables are required, these can be set at balenaCloud dashboard :
+| Name           | Value                                                                 |
+| -------------- | --------------------------------------------------------------------- |
+| WALLET_ADDRESS | Change this to your Monero wallet address which you install and set   |
+| MINER_POOL     | (Optional) Change this to the mining pool you want to join            |
+| PASSWORD       | (Optional) Change this to your pool password                          |
 
-
-| Name                                  | Value                                                                                     |
-| ------------------------------------- | ----------------------------------------------------------------------------------------- |
-| WALLET_ADDRESS                        | Change this to your monero wallet address which you install and set
-| MINER_POOL                            | (Optional) Change this to the mining pool you want to join
-| PASSWORD                              | (Optional) Change this to yor pool password  
-
---------------------
-
-Attribution
+## Attribution
 
 - [XMRig project](https://github.com/xmrig)
 
@@ -50,32 +42,32 @@ Attribution
 
 If you want to build the Docker image locally (outside of balenaCloud), here are a few helpful examples. The repository's `Dockerfile.template` accepts build arguments so you can select appropriate base images for your target device.
 
-1) Default (aarch64 / raspberrypi4-64)
+1. Default (aarch64 / raspberrypi4-64)
 
 ```bash
 docker build -t monero-balena:latest .
 ```
 
-2) Armv7 (32-bit Raspberry Pi / linux/arm/v7)
+1. Armv7 (32-bit Raspberry Pi / linux/arm/v7)
 
 ```bash
 docker build \
-	--build-arg BASE_BUILD_IMAGE=balenalib/raspberrypi-debian:bookworm-build \
-	--build-arg BASE_RUN_IMAGE=balenalib/raspberrypi-debian:bookworm-run \
-	--build-arg DEVICE_TYPE=raspberrypi \
-	-t monero-balena:armv7 .
+  --build-arg BASE_BUILD_IMAGE=balenalib/raspberrypi-debian:bookworm-build \
+  --build-arg BASE_RUN_IMAGE=balenalib/raspberrypi-debian:bookworm-run \
+  --build-arg DEVICE_TYPE=raspberrypi \
+  -t monero-balena:armv7 .
 ```
 
-3) Cross-build on x86 with buildx + QEMU
+1. Cross-build on x86 with buildx + QEMU
 
 ```bash
 docker buildx create --use --name mybuilder || true
 docker run --rm --privileged tonistiigi/binfmt --install all
 docker buildx build --platform linux/arm/v7 \
-	--build-arg BASE_BUILD_IMAGE=balenalib/raspberrypi-debian:bookworm-build \
-	--build-arg BASE_RUN_IMAGE=balenalib/raspberrypi-debian:bookworm-run \
-	--build-arg DEVICE_TYPE=raspberrypi \
-	-t monero-balena:armv7 --load .
+  --build-arg BASE_BUILD_IMAGE=balenalib/raspberrypi-debian:bookworm-build \
+  --build-arg BASE_RUN_IMAGE=balenalib/raspberrypi-debian:bookworm-run \
+  --build-arg DEVICE_TYPE=raspberrypi \
+  -t monero-balena:armv7 --load .
 ```
 
 Replace the `BASE_*` arguments with the exact balena base images for your device if necessary.
