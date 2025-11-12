@@ -15,23 +15,17 @@ WORKDIR /usr/src/app
 
 RUN apt-get update \
     && apt-get install -yq \
-    build-essential \
-    git \
     cmake \
-    pkg-config \
-    libssl-dev \
     libuv1-dev \
     libhwloc-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/xmrig/xmrig.git
-RUN mkdir -p xmrig/build
+RUN mkdir xmrig/build
 WORKDIR /usr/src/app/xmrig/build
 RUN cmake ..
-# Use a single job to reduce peak memory usage on remote builders (avoid OOM)
-RUN make -j1
-
+RUN make -j$(nproc)
 
 ###
 # Runtime
