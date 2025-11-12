@@ -41,9 +41,9 @@ case "$ARCH" in
     PLATFORM="linux/arm64"
     ;;
   armv7|rpi3)
-    BASE_BUILD_IMAGE="balenalib/raspberrypi-debian:bookworm-build"
-    BASE_RUN_IMAGE="balenalib/raspberrypi-debian:bookworm-run"
-    DEVICE_TYPE="raspberrypi"
+    BASE_BUILD_IMAGE="balenalib/raspberrypi3-debian:bookworm-build"
+    BASE_RUN_IMAGE="balenalib/raspberrypi3-debian:bookworm-run"
+    DEVICE_TYPE="raspberrypi3"
     PLATFORM="linux/arm/v7"
     ;;
   amd64)
