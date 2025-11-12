@@ -5,7 +5,7 @@
 ARG BASE_BUILD_IMAGE=balenalib/raspberrypi3-debian:bookworm-build
 ARG BASE_RUN_IMAGE=balenalib/raspberrypi3-debian:bookworm-run
 # Optional: override device-type label (useful for balena metadata)
-ARG DEVICE_TYPE=raspberrypi4-64
+ARG DEVICE_TYPE=orange-pi-zero
 
 # Default labels assume 64-bit Pi 4; override when building for other platforms if needed
 FROM ${BASE_BUILD_IMAGE} as build
