@@ -1,0 +1,63 @@
+name: Release and deploy
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+      - '!v*.*.*-*'
+
+jobs:
+  release:
+    name: Create GitHub release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Validate stable SemVer tag
+        shell: bash
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          if [[ ! "$TAG" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            echo "Tag '$TAG' is not a stable SemVer tag (expected vMAJOR.MINOR.PATCH)." >&2
+            exit 1
+          fi
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v3.0.2
+        with:
+          tag_name: ${{ github.ref_name }}
+          generate_release_notes: true
+
+  deploy:
+    name: Deploy to Balena
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    environment: production
+    concurrency:
+      group: balena-production
+      cancel-in-progress: false
+    steps:
+      - name: Checkout release tag
+        uses: actions/checkout@v6
+
+      - name: Install balena CLI
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24.11.0'
+
+      - name: Install balena CLI package
+        run: npm install --global --production balena-cli@25.2.5
+
+      - name: Verify balena CLI
+        run: balena version
+
+      - name: Push release to Balena
+        env:
+          BALENA_TOKEN: ${{ secrets.BALENA_TOKEN }}
+        run: |
+          test -n "$BALENA_TOKEN"
+          balena login --token "$BALENA_TOKEN"
+          balena push gh_cniweb/cpuminer

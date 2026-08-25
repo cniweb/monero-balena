@@ -38,6 +38,15 @@ The following [Device Configuration](https://www.balena.io/docs/learn/manage/con
 
 - [XMRig project](https://github.com/xmrig)
 
+## Releases and deployment
+
+Pushing a stable SemVer tag such as `v1.2.3` automatically creates a GitHub
+Release with generated release notes and deploys the tagged source to the
+`gh_cniweb/cpuminer` balena fleet.
+
+The release workflow requires the repository secret `BALENA_TOKEN`. Tags with
+pre-release suffixes, such as `v1.2.3-rc.1`, do not start the release workflow.
+
 ## Building locally (arch-specific notes)
 
 If you want to build the Docker image locally (outside of balenaCloud), here are a few helpful examples. The repository's `Dockerfile.template` accepts build arguments so you can select appropriate base images for your target device.
