@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      metadata_commit: ${{ steps.promote.outputs.metadata_commit }}
     steps:
       - name: Validate stable SemVer tag
         shell: bash
@@ -30,6 +32,7 @@ jobs:
           fetch-depth: 0
 
       - name: Promote changelog entry
+        id: promote
         shell: bash
         env:
           TAG: ${{ github.ref_name }}
@@ -96,6 +99,8 @@ jobs:
             git push origin HEAD:main
           fi
 
+          echo "metadata_commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
           git tag --force "$TAG" HEAD
           git push --force origin "refs/tags/$TAG"
 
@@ -118,6 +123,8 @@ jobs:
     steps:
       - name: Checkout release tag
         uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.release.outputs.metadata_commit }}
 
       - name: Install balena CLI
         uses: actions/setup-node@v7
