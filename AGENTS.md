@@ -1,13 +1,12 @@
 # Repository Instructions
 
-## Scope and Layout
+## Build Surface
 
-- This repository builds a Balena/Docker image containing a compiled XMRig binary for Raspberry Pi targets.
-- The source Dockerfile is `Dockerfile.template`, not `Dockerfile`; direct Docker commands must pass `-f Dockerfile.template` unless a generated Dockerfile is intentionally created.
-- `build.sh` wraps native and Buildx builds; `start.sh` assembles runtime arguments from environment variables; `balena.yml` targets `raspberrypi4-64`.
-- CI builds `linux/arm/v7` and `linux/arm64` images with Docker Buildx and QEMU. It does not start the image or validate mining behavior.
+- This is a Balena/Docker image project; `Dockerfile.template` is the source Dockerfile and there is no root `Dockerfile`. Direct Docker commands must use `-f Dockerfile.template`.
+- `build.sh` selects base images, device labels, and platforms; inspect its `case` mapping before changing architecture aliases or tags. Its Docker invocations currently omit `-f Dockerfile.template`, so use the explicit Docker command below when building locally.
+- `start.sh` is the runtime entrypoint and passes `WALLET_ADDRESS`, `MINER_POOL`, and `PASSWORD` to `xmrig`; `balena.yml` deploys `raspberrypi4-64` by default.
 
-## Commands
+## Verification
 
 ```bash
 docker build -f Dockerfile.template -t monero-balena:test .
@@ -17,14 +16,12 @@ docker run --rm --entrypoint xmrig monero-balena:test --version
 balena push <fleet>
 ```
 
-- Use the architecture and base-image mappings in `build.sh` as the executable source of truth. README and CI currently use different Raspberry Pi image/device aliases; verify all three before changing one.
-- Cross-builds require Docker Buildx, QEMU/binfmt support, and network access.
-- There is no source-level unit-test or lint suite; image construction and the explicit binary smoke test are the meaningful local checks.
+- Cross-builds require Docker Buildx, QEMU/binfmt, and network access.
+- CI builds only `linux/arm/v7` and `linux/arm64` images with Buildx; it does not start the image or validate mining behavior. There is no source-level unit-test or lint suite.
+- Keep the architecture mappings in `build.sh`, CI, and README aligned. They currently use different ARMv7 base-image/device aliases, so verify all three before changing one.
 
-## Runtime and Reproducibility
+## Operational Risks
 
-- Runtime variables are `WALLET_ADDRESS`, `MINER_POOL`, `PASSWORD`, and `RESIN_DEVICE_NAME_AT_INIT`.
-- The current scripts contain placeholder/default wallet values and print wallet/pool/password-related values. Never add or retain secret-bearing logs in production behavior.
-- XMRig is cloned from an unpinned source branch, so builds are not reproducible. Pin a revision and verify checksums/signatures before treating an image as release-grade.
-- `build.sh` argument parsing and tag handling are fragile; inspect the script before changing invocation syntax.
-- Distinguish local Docker testing from Balena deployment. Do not assume the default image is a safe offline run.
+- Treat wallet, pool, and password values as secrets. `start.sh` currently supplies placeholder defaults and prints these values; do not add or retain secret-bearing logs in production behavior.
+- XMRig is cloned from an unpinned Git branch in `Dockerfile.template`; pin a revision and verify checksums or signatures before calling an image release-grade.
+- Separate local Docker smoke tests from Balena deployment; a successful image build does not prove mining or device runtime behavior.

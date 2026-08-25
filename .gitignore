@@ -1,3 +1,6 @@
 balena-push.log
 .DS_Store
 .DS_Store/
+
+# Local Serena/MCP workspace state
+.serena/
