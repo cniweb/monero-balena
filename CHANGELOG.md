@@ -9,6 +9,20 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ### Added
 
+- Nothing yet.
+
+### Changed
+
+- Nothing yet.
+
+### Fixed
+
+- Nothing yet.
+
+## [v0.0.1] - 2026-08-25
+
+### Added
+
 - Balena application for running an XMRig Monero miner on Raspberry Pi devices.
 - Configurable Docker base images, device types, and architecture-specific builds.
 - Native and Buildx build convenience script for aarch64, ARMv7, and amd64.
@@ -29,4 +43,6 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## Links
 
-[unreleased]: https://github.com/cniweb/monero-balena/compare/HEAD...HEAD
+[unreleased]: https://github.com/cniweb/monero-balena/compare/v0.0.1...HEAD
+
+[v0.0.1]: https://github.com/cniweb/monero-balena/releases/tag/v0.0.1
