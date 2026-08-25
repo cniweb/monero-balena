@@ -21,6 +21,7 @@ balena push <fleet>
 - CI cross-builds typically take about 20 minutes per run; wait at least 20 minutes before treating an in-progress run as stalled, then inspect the final status.
 - Keep the architecture mappings in `build.sh`, CI, and README aligned. They currently use different ARMv7 base-image/device aliases, so verify all three before changing one.
 - Stable tags matching `vMAJOR.MINOR.PATCH` trigger `.github/workflows/release.yml`; it promotes `CHANGELOG.md` on `main`, creates the GitHub Release, then deploys to `gh_cniweb/cpuminer` using the `BALENA_TOKEN` repository secret.
+- Balena's displayed release version comes from `balena.yml`'s `version`; the release workflow injects the numeric Git tag version there during CI before `balena push`.
 
 ## Operational Risks
 

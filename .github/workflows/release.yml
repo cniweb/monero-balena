@@ -112,6 +112,28 @@ jobs:
       - name: Verify balena CLI
         run: balena version
 
+      - name: Set Balena release version
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          BALENA_VERSION="${RELEASE_TAG#v}"
+          if ! [[ "$BALENA_VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            echo "Release tag '$RELEASE_TAG' is not a valid Balena version source." >&2
+            exit 1
+          fi
+          awk -v version="$BALENA_VERSION" '
+            /^name:/ {
+              print
+              print "version: " version
+              next
+            }
+            !/^version:/ { print }
+          ' balena.yml > balena.yml.tmp
+          mv balena.yml.tmp balena.yml
+          grep -Fq "version: $BALENA_VERSION" balena.yml
+
       - name: Push release to Balena
         env:
           BALENA_TOKEN: ${{ secrets.BALENA_TOKEN }}
