@@ -115,7 +115,10 @@ jobs:
       - name: Push release to Balena
         env:
           BALENA_TOKEN: ${{ secrets.BALENA_TOKEN }}
+          RELEASE_TAG: ${{ github.ref_name }}
         run: |
           test -n "$BALENA_TOKEN"
           balena login --token "$BALENA_TOKEN"
-          balena push gh_cniweb/cpuminer
+          balena push gh_cniweb/cpuminer \
+            --note "GitHub Release ${RELEASE_TAG}" \
+            --release-tag github_release "${RELEASE_TAG}"

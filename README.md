@@ -50,6 +50,9 @@ Release with generated release notes, promotes the matching `CHANGELOG.md`
 `[Unreleased]` section, and deploys the tagged source to the
 `gh_cniweb/cpuminer` balena fleet.
 
+The Balena release receives the GitHub tag as the `github_release` release tag
+and the GitHub release as its release note.
+
 The release workflow requires the repository secret `BALENA_TOKEN`. Tags with
 pre-release suffixes, such as `v1.2.3-rc.1`, do not start the release workflow.
 
