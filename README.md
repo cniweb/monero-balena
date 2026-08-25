@@ -51,8 +51,8 @@ Release with generated release notes, promotes the matching `CHANGELOG.md`
 `gh_cniweb/cpuminer` balena fleet.
 
 The Balena release receives the GitHub tag as the `github_release` release tag
-and the GitHub release as its release note. The workflow also writes the
-numeric tag version to `balena.yml` during the deploy, so Balena displays
+and the GitHub release as its release note. Before deployment, the workflow
+commits the numeric tag version to `balena.yml` on `main`, so Balena displays
 `0.0.1` instead of an automatically generated `0.0.0+revN` version.
 
 The release workflow requires the repository secret `BALENA_TOKEN`. Tags with

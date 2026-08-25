@@ -39,47 +39,65 @@ jobs:
 
           if grep -q "^## \[$TAG\] - " CHANGELOG.md; then
             echo "CHANGELOG.md already contains $TAG; nothing to promote."
-            exit 0
+          else
+            if ! grep -q '^## \[Unreleased\]$' CHANGELOG.md; then
+              echo "CHANGELOG.md has no [Unreleased] section." >&2
+              exit 1
+            fi
+
+            awk -v tag="$TAG" -v date="$date_utc" '
+              /^## \[Unreleased\]$/ {
+                print "## [Unreleased]"
+                print ""
+                print "### Added"
+                print ""
+                print "- Nothing yet."
+                print ""
+                print "### Changed"
+                print ""
+                print "- Nothing yet."
+                print ""
+                print "### Fixed"
+                print ""
+                print "- Nothing yet."
+                print ""
+                print "## [" tag "] - " date
+                in_unreleased = 1
+                next
+              }
+              in_unreleased && /^## / { in_unreleased = 0 }
+              { print }
+            ' CHANGELOG.md > CHANGELOG.md.tmp
+            mv CHANGELOG.md.tmp CHANGELOG.md
+
+            sed -i "s#^\[unreleased\]:.*#\[unreleased\]: https://github.com/cniweb/monero-balena/compare/$TAG...HEAD#" CHANGELOG.md
+            printf '\n[%s]: https://github.com/cniweb/monero-balena/releases/tag/%s\n' "$TAG" "$TAG" >> CHANGELOG.md
           fi
 
-          if ! grep -q '^## \[Unreleased\]$' CHANGELOG.md; then
-            echo "CHANGELOG.md has no [Unreleased] section." >&2
-            exit 1
-          fi
-
-          awk -v tag="$TAG" -v date="$date_utc" '
-            /^## \[Unreleased\]$/ {
-              print "## [Unreleased]"
-              print ""
-              print "### Added"
-              print ""
-              print "- Nothing yet."
-              print ""
-              print "### Changed"
-              print ""
-              print "- Nothing yet."
-              print ""
-              print "### Fixed"
-              print ""
-              print "- Nothing yet."
-              print ""
-              print "## [" tag "] - " date
-              in_unreleased = 1
+          balena_version="${TAG#v}"
+          awk -v version="$balena_version" '
+            /^name:/ {
+              print
+              print "version: " version
               next
             }
-            in_unreleased && /^## / { in_unreleased = 0 }
-            { print }
-          ' CHANGELOG.md > CHANGELOG.md.tmp
-          mv CHANGELOG.md.tmp CHANGELOG.md
-
-          sed -i "s#^\[unreleased\]:.*#\[unreleased\]: https://github.com/cniweb/monero-balena/compare/$TAG...HEAD#" CHANGELOG.md
-          printf '\n[%s]: https://github.com/cniweb/monero-balena/releases/tag/%s\n' "$TAG" "$TAG" >> CHANGELOG.md
+            !/^version:/ { print }
+          ' balena.yml > balena.yml.tmp
+          mv balena.yml.tmp balena.yml
+          grep -Fq "version: $balena_version" balena.yml
 
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add CHANGELOG.md
-          git commit -m "docs: promote $TAG changelog [skip ci]"
-          git push origin HEAD:main
+          git add CHANGELOG.md balena.yml
+          if git diff --cached --quiet; then
+            echo "Release metadata for $TAG is already committed."
+          else
+            git commit -m "release: prepare $TAG metadata [skip ci]"
+            git push origin HEAD:main
+          fi
+
+          git tag --force "$TAG" HEAD
+          git push --force origin "refs/tags/$TAG"
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v3.0.2
@@ -112,34 +130,13 @@ jobs:
       - name: Verify balena CLI
         run: balena version
 
-      - name: Set Balena release version
-        shell: bash
-        env:
-          RELEASE_TAG: ${{ github.ref_name }}
-        run: |
-          set -euo pipefail
-          BALENA_VERSION="${RELEASE_TAG#v}"
-          if ! [[ "$BALENA_VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
-            echo "Release tag '$RELEASE_TAG' is not a valid Balena version source." >&2
-            exit 1
-          fi
-          awk -v version="$BALENA_VERSION" '
-            /^name:/ {
-              print
-              print "version: " version
-              next
-            }
-            !/^version:/ { print }
-          ' balena.yml > balena.yml.tmp
-          mv balena.yml.tmp balena.yml
-          grep -Fq "version: $BALENA_VERSION" balena.yml
-
       - name: Push release to Balena
         env:
           BALENA_TOKEN: ${{ secrets.BALENA_TOKEN }}
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
           test -n "$BALENA_TOKEN"
+          grep -Fq "version: ${RELEASE_TAG#v}" balena.yml
           balena login --token "$BALENA_TOKEN"
           balena push gh_cniweb/cpuminer \
             --note "GitHub Release ${RELEASE_TAG}" \

@@ -1,5 +1,6 @@
 name: Monero Miner
 type: sw.application
+version: 0.0.1
 joinable: false
 description: >-
   Monero-Miner for Single board computers like Raspberry Pi, powered by [balena](https://balena.io)
@@ -39,5 +40,4 @@ data:
   defaultDeviceType: raspberrypi4-64
   supportedDeviceTypes:
     - raspberrypi4-64
-
 
