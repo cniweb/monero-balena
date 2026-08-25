@@ -19,6 +19,20 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 - Nothing yet.
 
+## [v1.0.0] - 2026-08-25
+
+### Added
+
+- Nothing yet.
+
+### Changed
+
+- Nothing yet.
+
+### Fixed
+
+- Nothing yet.
+
 ## [v0.0.1] - 2026-08-25
 
 ### Added
@@ -43,6 +57,8 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## Links
 
-[unreleased]: https://github.com/cniweb/monero-balena/compare/v0.0.1...HEAD
+[unreleased]: https://github.com/cniweb/monero-balena/compare/v1.0.0...HEAD
 
 [v0.0.1]: https://github.com/cniweb/monero-balena/releases/tag/v0.0.1
+
+[v1.0.0]: https://github.com/cniweb/monero-balena/releases/tag/v1.0.0
