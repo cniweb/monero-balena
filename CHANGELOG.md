@@ -9,15 +9,23 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ### Added
 
-- Nothing yet.
+- Balena application for running an XMRig Monero miner on Raspberry Pi devices.
+- Configurable Docker base images, device types, and architecture-specific builds.
+- Native and Buildx build convenience script for aarch64, ARMv7, and amd64.
+- GitHub Actions workflow for ARM64 and ARMv7 container build verification.
+- Automated stable-tag GitHub releases followed by Balena fleet deployment.
 
 ### Changed
 
-- Nothing yet.
+- Updated Raspberry Pi build and runtime images for 64-bit and ARMv7 targets.
+- Documented Balena deployment, miner configuration, local builds, and supported architectures.
+- Improved XMRig startup defaults, argument quoting, and donation-level configuration.
 
 ### Fixed
 
-- Nothing yet.
+- Corrected wallet, pool, password, and device-name handling in the runtime entrypoint.
+- Corrected ARMv7 base-image and device-type mappings used by builds and CI.
+- Added repository guidance, release automation, and local-tooling ignore rules.
 
 ## Links
 
