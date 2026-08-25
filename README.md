@@ -41,7 +41,8 @@ The following [Device Configuration](https://www.balena.io/docs/learn/manage/con
 ## Releases and deployment
 
 Pushing a stable SemVer tag such as `v1.2.3` automatically creates a GitHub
-Release with generated release notes and deploys the tagged source to the
+Release with generated release notes, promotes the matching `CHANGELOG.md`
+`[Unreleased]` section, and deploys the tagged source to the
 `gh_cniweb/cpuminer` balena fleet.
 
 The release workflow requires the repository secret `BALENA_TOKEN`. Tags with

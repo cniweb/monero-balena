@@ -20,7 +20,7 @@ balena push <fleet>
 - CI builds only `linux/arm/v7` and `linux/arm64` images with Buildx; it does not start the image or validate mining behavior. There is no source-level unit-test or lint suite.
 - CI cross-builds typically take about 20 minutes per run; wait at least 20 minutes before treating an in-progress run as stalled, then inspect the final status.
 - Keep the architecture mappings in `build.sh`, CI, and README aligned. They currently use different ARMv7 base-image/device aliases, so verify all three before changing one.
-- Stable tags matching `vMAJOR.MINOR.PATCH` trigger `.github/workflows/release.yml`; it creates the GitHub Release first, then deploys to `gh_cniweb/cpuminer` using the `BALENA_TOKEN` repository secret.
+- Stable tags matching `vMAJOR.MINOR.PATCH` trigger `.github/workflows/release.yml`; it promotes `CHANGELOG.md` on `main`, creates the GitHub Release, then deploys to `gh_cniweb/cpuminer` using the `BALENA_TOKEN` repository secret.
 
 ## Operational Risks
 
