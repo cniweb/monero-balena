@@ -38,6 +38,11 @@ The following [Device Configuration](https://www.balena.io/docs/learn/manage/con
 
 - [XMRig project](https://github.com/xmrig)
 
+## Project documentation
+
+- [CHANGELOG](CHANGELOG.md): release history and notable changes.
+- [AGENTS.md](AGENTS.md): repository guidance for OpenCode and other coding agents.
+
 ## Releases and deployment
 
 Pushing a stable SemVer tag such as `v1.2.3` automatically creates a GitHub
